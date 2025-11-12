@@ -1,0 +1,22 @@
+name: 'GH Action Check Path Changes'
+description: 'Check if specific paths have changed in a GitHub repository.'
+author: 'mattyfours'
+
+inputs:
+  paths:
+    description: 'Comma-separated list of paths to check for changes.'
+    required: true
+
+  pr-number:
+    description:
+      'Pull request number to check changes against. If not provided, checks
+      against the latest commit.'
+    required: true
+
+outputs:
+  has-changed:
+    description: 'Boolean indicating if the specified directories have changed.'
+
+runs:
+  using: 'node20'
+  main: 'dist/index.js'

@@ -1,0 +1,30 @@
+name: Check Directory Changes
+
+on:
+  workflow_dispatch:
+  pull_request:
+    types: [opened, reopened, synchronize, edited]
+    branches:
+      - develop
+      - main
+
+run-name: Check directory changes
+
+jobs:
+  deploy:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 21
+
+      - uses: mattyfours/gh-action-check-directory-changes@main
+        id: has-changed-directory
+        with:
+          directories: 'src, docs'
+          pr-number: ${{ github.event.pull_request.number }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

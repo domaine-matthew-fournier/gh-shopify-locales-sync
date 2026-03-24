@@ -16,11 +16,7 @@ Syncing Steps
 Usage
 -----
 
-[](https://github.com/meetdomaine/shopify-jsons-sync#usage)
-
 ### Basic Usage (Sync from Live Theme)
-
-[](https://github.com/meetdomaine/shopify-jsons-sync#basic-usage-sync-from-live-theme)
 
 ```source-yaml
  - uses: domaine-matthew-fournier/gh-shopify-locales-sync@v1.2.0
@@ -32,8 +28,6 @@ Usage
 
 Inputs
 ------
-
-[](https://github.com/meetdomaine/shopify-jsons-sync#inputs)
 
 | Input | Required | Default | Description |
 | --- | --- | --- | --- |

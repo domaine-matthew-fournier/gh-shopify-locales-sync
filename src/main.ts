@@ -11,7 +11,9 @@ async function run(): Promise<void> {
   try {
     // REQUIRED INPUTS
     const store: string = core.getInput('store')
-    const targetThemeId: string = core.getInput('theme')
+    const targetThemeIds: string[] = core.getInput('theme')
+      .split(',')
+      .map((id) => id.trim())
 
     // Working Directory Input (optional)
     // Should be the root of the Shopify theme
@@ -24,28 +26,32 @@ async function run(): Promise<void> {
       process.chdir(workingDirectory)
     }
 
-    await cleanRemoteFiles()
+    for (const targetThemeId of targetThemeIds) {
+      info(`-------\nUpdating Locales JSON for Theme "${targetThemeId}"\n-------`)
 
-    info(`Pulling JSON files from theme "${targetThemeId}"`)
+      await cleanRemoteFiles()
 
-    await exec(
-      `shopify theme pull --only locales/*.json --theme "${targetThemeId}" --path remote --store ${store} --nodelete`
-    )
+      info(`Pulling JSON files from theme "${targetThemeId}"`)
 
-    const { remoteLocaleFiles, codeBaseLocaleFiles } =
-      await getlocaleFilesFromCodeBaseAndRemote()
+      await exec(
+        `shopify theme pull --only locales/*.json --theme "${targetThemeId}" --path remote --store ${store} --nodelete`
+      )
 
-    await updateJsonFilesInRemote(
-      codeBaseLocaleFiles,
-      remoteLocaleFiles,
-      `./remote/locales/`
-    )
+      const { remoteLocaleFiles, codeBaseLocaleFiles } =
+        await getlocaleFilesFromCodeBaseAndRemote()
 
-    info(`Pushing JSON files to theme "${targetThemeId}"`)
+      await updateJsonFilesInRemote(
+        codeBaseLocaleFiles,
+        remoteLocaleFiles,
+        `./remote/locales/`
+      )
 
-    await exec(
-      `shopify theme push --only locales/*.json --theme "${targetThemeId}" --path remote --store ${store} --nodelete`
-    )
+      info(`Pushing JSON files to theme "${targetThemeId}"`)
+
+      await exec(
+        `shopify theme push --only locales/*.json --theme "${targetThemeId}" --path remote --store ${store} --nodelete`
+      )
+    }
   } catch (error) {
     if (error instanceof Error) core.setFailed(error.message)
   } finally {

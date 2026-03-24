@@ -30265,7 +30265,9 @@ async function run() {
     try {
         // REQUIRED INPUTS
         const store = coreExports.getInput('store');
-        const targetThemeId = coreExports.getInput('theme');
+        const targetThemeIds = coreExports.getInput('theme')
+            .split(',')
+            .map((id) => id.trim());
         // Working Directory Input (optional)
         // Should be the root of the Shopify theme
         const workingDirectory = coreExports.getInput('working-directory', {
@@ -30275,13 +30277,16 @@ async function run() {
             coreExports.info(`Changing working directory to ${workingDirectory}`);
             process.chdir(workingDirectory);
         }
-        await cleanRemoteFiles();
-        coreExports.info(`Pulling JSON files from theme "${targetThemeId}"`);
-        await execExports.exec(`shopify theme pull --only locales/*.json --theme "${targetThemeId}" --path remote --store ${store} --nodelete`);
-        const { remoteLocaleFiles, codeBaseLocaleFiles } = await getlocaleFilesFromCodeBaseAndRemote();
-        await updateJsonFilesInRemote(codeBaseLocaleFiles, remoteLocaleFiles, `./remote/locales/`);
-        coreExports.info(`Pushing JSON files to theme "${targetThemeId}"`);
-        await execExports.exec(`shopify theme push --only locales/*.json --theme "${targetThemeId}" --path remote --store ${store} --nodelete`);
+        for (const targetThemeId of targetThemeIds) {
+            coreExports.info(`-------\nUpdating Locales JSON for Theme "${targetThemeId}"\n-------`);
+            await cleanRemoteFiles();
+            coreExports.info(`Pulling JSON files from theme "${targetThemeId}"`);
+            await execExports.exec(`shopify theme pull --only locales/*.json --theme "${targetThemeId}" --path remote --store ${store} --nodelete`);
+            const { remoteLocaleFiles, codeBaseLocaleFiles } = await getlocaleFilesFromCodeBaseAndRemote();
+            await updateJsonFilesInRemote(codeBaseLocaleFiles, remoteLocaleFiles, `./remote/locales/`);
+            coreExports.info(`Pushing JSON files to theme "${targetThemeId}"`);
+            await execExports.exec(`shopify theme push --only locales/*.json --theme "${targetThemeId}" --path remote --store ${store} --nodelete`);
+        }
     }
     catch (error) {
         if (error instanceof Error)

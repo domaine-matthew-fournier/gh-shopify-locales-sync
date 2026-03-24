@@ -1,51 +1,63 @@
 import * as core from '@actions/core'
-import * as github from '@actions/github'
-import { Octokit } from 'octokit'
-import { matchPattern } from './uitils.js'
+import {
+  EXEC_OPTIONS,
+  cleanRemoteFiles,
+  getlocaleFilesFromCodeBaseAndRemote,
+  updateJsonFilesInRemote
+  // getNewTemplatesToRemote,
+  // sendFilesWithPathToShopify,
+  // syncLocaleAndSettingsJSON
+} from './utils.js'
+import { exec } from '@actions/exec'
+import { info } from '@actions/core'
 
-/**
- * The main function for the action.
- * @returns {Promise<void>} Resolves when the action is complete.
- */
-export async function run(): Promise<void> {
+async function run(): Promise<void> {
   try {
-    const { owner, repo } = github.context.repo
-    const githubToken = process.env.GITHUB_TOKEN
-    const octokit = new Octokit({ auth: githubToken })
+    // REQUIRED INPUTS
+    const store: string = core.getInput('store')
+    const targetThemeId: string = core.getInput('theme')
 
-    const pathsToCheck = core
-      .getInput('paths', {
-        required: true,
-        trimWhitespace: true
-      })
-      .split(',')
-      .map((fileToCheck) => fileToCheck.trim())
-
-    const prNumber = Number(
-      core.getInput('pr-number', {
-        required: true,
-        trimWhitespace: true
-      })
-    )
-
-    const updatedPrFiles = await octokit.rest.pulls.listFiles({
-      owner,
-      repo,
-      pull_number: prNumber
+    // Working Directory Input (optional)
+    // Should be the root of the Shopify theme
+    const workingDirectory: string = core.getInput('working-directory', {
+      trimWhitespace: true
     })
 
-    const updatedPrFilenames = updatedPrFiles.data.map((file) => file.filename)
+    if (!!workingDirectory && workingDirectory !== '') {
+      info(`Changing working directory to ${workingDirectory}`)
+      process.chdir(workingDirectory)
+    }
 
-    const hasChanged = pathsToCheck.some((filePath) => {
-      return updatedPrFilenames.some((prFile) => matchPattern(prFile, filePath))
-    })
+    await cleanRemoteFiles()
 
-    console.log(
-      `PR ${hasChanged ? 'has' : 'has not'} changed files: ${pathsToCheck}`
+    info(`Pulling JSON files from theme ${targetThemeId}`)
+
+    await exec(
+      `shopify theme pull --only locales/*.json --theme "${targetThemeId}" --path remote --store ${store}`,
+      [],
+      EXEC_OPTIONS
     )
-    core.setOutput('has-changed', hasChanged)
+
+    const { remoteLocaleFiles, codeBaseLocaleFiles } =
+      await getlocaleFilesFromCodeBaseAndRemote()
+
+    await updateJsonFilesInRemote(
+      codeBaseLocaleFiles,
+      remoteLocaleFiles,
+      `./remote/locales/`
+    )
+
+    info(`Pushing JSON files to theme ${targetThemeId}`)
+
+    await exec(
+      `shopify theme push --only locales/*.json --theme "${targetThemeId}" --path remote --store ${store}`,
+      [],
+      EXEC_OPTIONS
+    )
   } catch (error) {
     if (error instanceof Error) core.setFailed(error.message)
+  } finally {
+    await cleanRemoteFiles()
   }
 }
 

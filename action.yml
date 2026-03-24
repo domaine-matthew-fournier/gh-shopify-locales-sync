@@ -1,22 +1,19 @@
-name: 'GH Action Check Path Changes'
-description: 'Check if specific paths have changed in a GitHub repository.'
-author: 'mattyfours'
-
+name: 'Shopify Locale Sync'
+description: 'Sync Shopify Theme Locale JSON files with a GitHub Repository'
+author: 'Matthew Fournier'
 inputs:
-  paths:
-    description: 'Comma-separated list of paths to check for changes.'
+  store:
     required: true
+    description: 'Store'
 
-  pr-number:
+  theme:
+    required: true
+    description: 'Target Theme ID to sync with GitHub Repository'
+
+  working-directory:
+    required: false
     description:
-      'Pull request number to check changes against. If not provided, checks
-      against the latest commit.'
-    required: true
-
-outputs:
-  has-changed:
-    description: 'Boolean indicating if the specified directories have changed.'
-
+      'Working Directory, root of Shopify Theme, defaults to current directory'
 runs:
-  using: 'node20'
   main: 'dist/index.js'
+  using: 'node20'

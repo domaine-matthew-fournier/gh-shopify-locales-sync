@@ -1,0 +1,30 @@
+{
+  "general": {
+    "accessibility": {
+      "skip_to_content": "Passer au contenu",
+      "collapse_content": "Réduire le contenu",
+      "expand_content": "Développer le contenu",
+      "close": "Fermer",
+      "error": "Erreur"
+    },
+    "breadcrumbs": {
+      "back": "Retour",
+      "home": "Accueil"
+    }
+  },
+  "shopify": {
+    "checkout": {
+      "marketing": {
+        "accept_sms_checkbox_label": "Recevoir des mises à jour par SMS concernant ma commande",
+        "sms": {
+          "disclaimer": {
+            "description_html": "Vous acceptez nos conditions"
+          }
+        }
+      },
+      "order_summary": {
+        "discount_label": "Code de réduction !"
+      }
+    }
+  }
+}

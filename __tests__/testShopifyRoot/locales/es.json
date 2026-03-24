@@ -1,0 +1,30 @@
+{
+  "general": {
+    "accessibility": {
+      "skip_to_content": "Saltar al contenido",
+      "collapse_content": "Contraer contenido",
+      "expand_content": "Expandir contenido"
+    },
+    "breadcrumbs": {
+      "back": "Volver",
+      "home": "Inicio",
+      "history": "Historial"
+    }
+  },
+  "shopify": {
+    "checkout": {
+      "marketing": {
+        "accept_sms_checkbox_label": "Envíame mensajes de texto con actualizaciones sobre mi pedido",
+        "sms": {
+          "disclaimer": {
+            "description_html": "Aceptas nuestros términos y condiciones",
+            "new_description_html": "Aceptas nuestros términos"
+          }
+        }
+      },
+      "order_summary": {
+        "discount_label": "Código de descuento"
+      }
+    }
+  }
+}

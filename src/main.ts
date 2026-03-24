@@ -11,7 +11,8 @@ async function run(): Promise<void> {
   try {
     // REQUIRED INPUTS
     const store: string = core.getInput('store')
-    const targetThemeIds: string[] = core.getInput('theme')
+    const targetThemeIds: string[] = core
+      .getInput('theme')
       .split(',')
       .map((id) => id.trim())
 
@@ -27,7 +28,9 @@ async function run(): Promise<void> {
     }
 
     for (const targetThemeId of targetThemeIds) {
-      info(`-------\nUpdating Locales JSON for Theme "${targetThemeId}"\n-------`)
+      info(
+        `-------\nUpdating Locales JSON for Theme "${targetThemeId}"\n-------`
+      )
 
       await cleanRemoteFiles()
 

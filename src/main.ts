@@ -28,8 +28,13 @@ async function run(): Promise<void> {
     }
 
     for (const targetThemeId of targetThemeIds) {
+      const dashesForThemeId = targetThemeId.replace(/./g, '-')
       info(
-        `-------\nUpdating Locales JSON for Theme "${targetThemeId}"\n-------`
+        [
+          `---------------------------------${dashesForThemeId}-`,
+          `Updating Locales JSON for Theme "${targetThemeId}"`,
+          `---------------------------------${dashesForThemeId}-`
+        ].join('\n')
       )
 
       await cleanRemoteFiles()

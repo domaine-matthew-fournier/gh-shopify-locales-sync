@@ -33,7 +33,7 @@ async function run(): Promise<void> {
     info(`Pulling JSON files from theme ${targetThemeId}`)
 
     await exec(
-      `shopify theme pull --only locales/*.json --theme "${targetThemeId}" --path remote --store ${store}`,
+      `shopify theme pull --only locales/*.json --theme "${targetThemeId}" --path remote --store ${store} --nodelete`,
       [],
       EXEC_OPTIONS
     )
@@ -50,7 +50,7 @@ async function run(): Promise<void> {
     info(`Pushing JSON files to theme ${targetThemeId}`)
 
     await exec(
-      `shopify theme push --only locales/*.json --theme "${targetThemeId}" --path remote --store ${store}`,
+      `shopify theme push --only locales/*.json --theme "${targetThemeId}" --path remote --store ${store} --nodelete`,
       [],
       EXEC_OPTIONS
     )

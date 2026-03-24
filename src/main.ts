@@ -26,11 +26,10 @@ async function run(): Promise<void> {
 
     await cleanRemoteFiles()
 
-    info(`Pulling JSON files from theme ${targetThemeId}`)
+    info(`Pulling JSON files from theme "${targetThemeId}"`)
 
     await exec(
-      `shopify theme pull --only locales/*.json --ignore locales/*.schema.json --theme "${targetThemeId}" --path remote --store ${store} --nodelete`,
-      []
+      `shopify theme pull --only locales/*.json --theme "${targetThemeId}" --path remote --store ${store} --nodelete`
     )
 
     const { remoteLocaleFiles, codeBaseLocaleFiles } =
@@ -42,11 +41,10 @@ async function run(): Promise<void> {
       `./remote/locales/`
     )
 
-    info(`Pushing JSON files to theme ${targetThemeId}`)
+    info(`Pushing JSON files to theme "${targetThemeId}"`)
 
     await exec(
-      `shopify theme push --only locales/*.json --ignore locales/*.schema.json --theme "${targetThemeId}" --path remote --store ${store} --nodelete`,
-      []
+      `shopify theme push --only locales/*.json --theme "${targetThemeId}" --path remote --store ${store} --nodelete`
     )
   } catch (error) {
     if (error instanceof Error) core.setFailed(error.message)

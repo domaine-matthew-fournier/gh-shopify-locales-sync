@@ -30276,12 +30276,12 @@ async function run() {
             process.chdir(workingDirectory);
         }
         await cleanRemoteFiles();
-        coreExports.info(`Pulling JSON files from theme ${targetThemeId}`);
-        await execExports.exec(`shopify theme pull --only locales/*.json --theme "${targetThemeId}" --path remote --store ${store} --nodelete`, []);
+        coreExports.info(`Pulling JSON files from theme "${targetThemeId}"`);
+        await execExports.exec(`shopify theme pull --only locales/*.json --theme "${targetThemeId}" --path remote --store ${store} --nodelete`);
         const { remoteLocaleFiles, codeBaseLocaleFiles } = await getlocaleFilesFromCodeBaseAndRemote();
         await updateJsonFilesInRemote(codeBaseLocaleFiles, remoteLocaleFiles, `./remote/locales/`);
-        coreExports.info(`Pushing JSON files to theme ${targetThemeId}`);
-        await execExports.exec(`shopify theme push --only locales/*.json --theme "${targetThemeId}" --path remote --store ${store} --nodelete`, []);
+        coreExports.info(`Pushing JSON files to theme "${targetThemeId}"`);
+        await execExports.exec(`shopify theme push --only locales/*.json --theme "${targetThemeId}" --path remote --store ${store} --nodelete`);
     }
     catch (error) {
         if (error instanceof Error)

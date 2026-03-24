@@ -6,17 +6,6 @@ import { readFile, writeFile } from 'fs/promises'
 import stripJsonComments from 'strip-json-comments'
 import deepmerge from 'deepmerge'
 
-export const EXEC_OPTIONS = {
-  listeners: {
-    stdout: (data: Buffer) => {
-      info(data.toString())
-    },
-    stderr: (data: Buffer) => {
-      errorLog(data.toString())
-    }
-  }
-}
-
 export const cleanRemoteFiles = async (): Promise<void> => {
   const remoteDir = 'remote'
 

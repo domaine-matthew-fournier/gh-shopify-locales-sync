@@ -1,12 +1,8 @@
 import * as core from '@actions/core'
 import {
-  EXEC_OPTIONS,
   cleanRemoteFiles,
   getlocaleFilesFromCodeBaseAndRemote,
   updateJsonFilesInRemote
-  // getNewTemplatesToRemote,
-  // sendFilesWithPathToShopify,
-  // syncLocaleAndSettingsJSON
 } from './utils.js'
 import { exec } from '@actions/exec'
 import { info } from '@actions/core'
@@ -33,9 +29,8 @@ async function run(): Promise<void> {
     info(`Pulling JSON files from theme ${targetThemeId}`)
 
     await exec(
-      `shopify theme pull --only locales/*.json --theme "${targetThemeId}" --path remote --store ${store} --nodelete`,
-      [],
-      EXEC_OPTIONS
+      `shopify theme pull --only locales/*.json --ignore locales/*.schema.json --theme "${targetThemeId}" --path remote --store ${store} --nodelete`,
+      []
     )
 
     const { remoteLocaleFiles, codeBaseLocaleFiles } =
@@ -50,9 +45,8 @@ async function run(): Promise<void> {
     info(`Pushing JSON files to theme ${targetThemeId}`)
 
     await exec(
-      `shopify theme push --only locales/*.json --theme "${targetThemeId}" --path remote --store ${store} --nodelete`,
-      [],
-      EXEC_OPTIONS
+      `shopify theme push --only locales/*.json --ignore locales/*.schema.json --theme "${targetThemeId}" --path remote --store ${store} --nodelete`,
+      []
     )
   } catch (error) {
     if (error instanceof Error) core.setFailed(error.message)

@@ -30278,7 +30278,12 @@ async function run() {
             process.chdir(workingDirectory);
         }
         for (const targetThemeId of targetThemeIds) {
-            coreExports.info(`-------\nUpdating Locales JSON for Theme "${targetThemeId}"\n-------`);
+            const dashesForThemeId = targetThemeId.replace(/./g, '-');
+            coreExports.info([
+                `---------------------------------${dashesForThemeId}-`,
+                `Updating Locales JSON for Theme "${targetThemeId}"`,
+                `---------------------------------${dashesForThemeId}-`
+            ].join('\n'));
             await cleanRemoteFiles();
             coreExports.info(`Pulling JSON files from theme "${targetThemeId}"`);
             await execExports.exec(`shopify theme pull --only locales/*.json --theme "${targetThemeId}" --path remote --store ${store} --nodelete`);

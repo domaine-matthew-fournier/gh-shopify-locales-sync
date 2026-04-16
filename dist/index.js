@@ -30039,7 +30039,7 @@ function requireCjs () {
 var cjsExports = requireCjs();
 var deepmerge = /*@__PURE__*/getDefaultExportFromCjs(cjsExports);
 
-const cleanRemoteFiles = async () => {
+const cleanRemoteFiles = async ({ recreate = false } = {}) => {
     const remoteDir = 'remote';
     if (!existsSync(remoteDir)) {
         coreExports.debug(`Skipping cleanRemoteFiles: ${remoteDir} directory not found, creating it`);
@@ -30048,6 +30048,9 @@ const cleanRemoteFiles = async () => {
     }
     try {
         await ioExports.rmRF(remoteDir);
+        if (recreate) {
+            await ioExports.mkdirP(remoteDir);
+        }
     }
     catch (error) {
         if (error instanceof Error)
@@ -30130,7 +30133,7 @@ async function run() {
                 `Updating Locales JSON for Theme "${targetThemeId}"`,
                 `---------------------------------${dashesForThemeId}-`
             ].join('\n'));
-            await cleanRemoteFiles();
+            await cleanRemoteFiles({ recreate: true });
             coreExports.info(`Pulling JSON files from theme "${targetThemeId}"`);
             await execExports.exec(`shopify theme pull --only locales/*.json --theme "${targetThemeId}" --path remote --store ${store} --nodelete`);
             const { remoteLocaleFiles, codeBaseLocaleFiles } = await getlocaleFilesFromCodeBaseAndRemote();

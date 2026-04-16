@@ -37,7 +37,7 @@ async function run(): Promise<void> {
         ].join('\n')
       )
 
-      await cleanRemoteFiles()
+      await cleanRemoteFiles({ recreate: true })
 
       info(`Pulling JSON files from theme "${targetThemeId}"`)
 

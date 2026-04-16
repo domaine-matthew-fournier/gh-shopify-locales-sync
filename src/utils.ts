@@ -6,7 +6,9 @@ import { readFile, writeFile } from 'fs/promises'
 import stripJsonComments from 'strip-json-comments'
 import deepmerge from 'deepmerge'
 
-export const cleanRemoteFiles = async (): Promise<void> => {
+export const cleanRemoteFiles = async ({
+  recreate = false
+}: { recreate?: boolean } = {}): Promise<void> => {
   const remoteDir = 'remote'
 
   if (!existsSync(remoteDir)) {
@@ -19,6 +21,9 @@ export const cleanRemoteFiles = async (): Promise<void> => {
 
   try {
     await rmRF(remoteDir)
+    if (recreate) {
+      await mkdirP(remoteDir)
+    }
   } catch (error) {
     if (error instanceof Error) errorLog(error.message)
   }

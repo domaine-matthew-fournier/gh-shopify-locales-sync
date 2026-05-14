@@ -8,7 +8,7 @@ Syncing Steps
 
 - Pulls target theme `locale` files to `/remote` directory
 - Loops through all files in `/locales`
-  - If remote version does not exist, copy as is to the `/remote` directory
+  - If remote version does not exist, copy as it to the `/remote` directory
   - If remote version does exist, merge JSON and update files in `/remote` directory
     - Remote JSON will take priority, only new keys from the local codebase will be added.
 - Push `locale` files to the target theme from the `/remote` directory 

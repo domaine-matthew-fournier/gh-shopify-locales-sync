@@ -17,8 +17,7 @@ inputs:
 
   sync-behaviours:
     required: false
-    description:
-      'Comma seperated list of behaviour tags'
+    description: 'Comma seperated list of behaviour tags'
 runs:
   main: 'dist/index.js'
   using: 'node20'

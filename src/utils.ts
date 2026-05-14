@@ -63,14 +63,16 @@ export const updateJsonFilesInRemote = async (
 
     if (!destinationFile) {
       if (behaviourDoNotAddNewLocales === true) {
-        info(`No matching destination file found for ${baseFile}, skipping due to behaviour 'do-not-add-new-locales'`)
+        info(
+          `No matching destination file found for ${baseFile}, skipping due to behaviour 'do-not-add-new-locales'`
+        )
       } else {
         info(
           `No matching destination file found for ${baseFile}, creating new file at destination`
         )
         const destinationFilePath = `${destinationPath}${baseFileName}`
         const fileContent = await readFile(baseFile)
-        await writeFile(destinationFilePath, fileContent)   
+        await writeFile(destinationFilePath, fileContent)
       }
       continue
     }

@@ -9,6 +9,7 @@ Syncing Steps
 - Pulls target theme `locale` files to `/remote` directory
 - Loops through all files in `/locales`
   - If remote version does not exist, copy as is to the `/remote` directory
+    - This behaviour can be blocked by adding `sync-behaviours` = `do-not-add-new-locales` to the
   - If remote version does exist, merge JSON and update files in `/remote` directory
     - Remote JSON will take priority, only new keys from the local codebase will be added.
 - Push `locale` files to the target theme from the `/remote` directory 
@@ -34,6 +35,8 @@ Inputs
 | `store` | Yes | - | The Shopify store URL or identifier |
 | `theme` | Yes | - | Theme name or comma seperated list of theme IDs |
 | `working-directory` | No | - | Working directory path if the action should run in a subdirectory |
+| `sync-behaviours` | No | - | Comma seperated list of behaviour tags |
+
 
 Development
 -----------

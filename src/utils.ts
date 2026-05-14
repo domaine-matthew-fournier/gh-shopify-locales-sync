@@ -51,7 +51,8 @@ export const getlocaleFilesFromCodeBaseAndRemote = async (): Promise<{
 export const updateJsonFilesInRemote = async (
   baseJsonFiles: string[],
   destinationJsonFiles: string[],
-  destinationPath = `./remote/locales/`
+  destinationPath = `./remote/locales/`,
+  behaviourDoNotAddNewLocales: boolean
 ) => {
   for (const baseFile of baseJsonFiles) {
     const baseFileName = baseFile.split('/').pop()
@@ -61,12 +62,16 @@ export const updateJsonFilesInRemote = async (
     )
 
     if (!destinationFile) {
-      info(
-        `No matching destination file found for ${baseFile}, creating new file at destination`
-      )
-      const destinationFilePath = `${destinationPath}${baseFileName}`
-      const fileContent = await readFile(baseFile)
-      await writeFile(destinationFilePath, fileContent)
+      if (behaviourDoNotAddNewLocales === true) {
+        info(`No matching destination file found for ${baseFile}, skipping due to behaviour 'do-not-add-new-locales'`)
+      } else {
+        info(
+          `No matching destination file found for ${baseFile}, creating new file at destination`
+        )
+        const destinationFilePath = `${destinationPath}${baseFileName}`
+        const fileContent = await readFile(baseFile)
+        await writeFile(destinationFilePath, fileContent)   
+      }
       continue
     }
 

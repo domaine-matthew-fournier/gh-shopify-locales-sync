@@ -14,6 +14,11 @@ inputs:
     required: false
     description:
       'Working Directory, root of Shopify Theme, defaults to current directory'
+
+  sync-behaviours:
+    required: false
+    description:
+      'Comma seperated list of behaviour tags'
 runs:
   main: 'dist/index.js'
   using: 'node20'

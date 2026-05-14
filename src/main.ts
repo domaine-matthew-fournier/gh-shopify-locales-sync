@@ -16,6 +16,14 @@ async function run(): Promise<void> {
       .split(',')
       .map((id) => id.trim())
 
+    const syncBehaviours: string[] = core
+      .getInput('sync-behaviours')
+      ?.split(',')
+      ?.map((behaviour) => behaviour.trim())
+      ?? []
+
+    const behaviourDoNotAddNewLocales: boolean = syncBehaviours.includes('do-not-add-new-locales')
+
     // Working Directory Input (optional)
     // Should be the root of the Shopify theme
     const workingDirectory: string = core.getInput('working-directory', {
@@ -51,7 +59,8 @@ async function run(): Promise<void> {
       await updateJsonFilesInRemote(
         codeBaseLocaleFiles,
         remoteLocaleFiles,
-        `./remote/locales/`
+        `./remote/locales/`,
+        behaviourDoNotAddNewLocales
       )
 
       info(`Pushing JSON files to theme "${targetThemeId}"`)

@@ -7,17 +7,20 @@ A GitHub Action to sync Shopify locales JSON from your repo to the target theme
 - Pulls target theme `locale` files to `/remote` directory
 - Loops through all files in `/locales`
   - If remote version does not exist, copy as it to the `/remote` directory
-    - This behaviour can be blocked by adding `sync-behaviours` = `do-not-add-new-locales` to the
-  - If remote version does exist, merge JSON and update files in `/remote` directory
-    - Remote JSON will take priority, only new keys from the local codebase will be added.
-- Push `locale` files to the target theme from the `/remote` directory 
+    - This behaviour can be blocked by adding `configs` =
+      `do-not-add-new-locales` to the inputs
+  - If remote version does exist, merge JSON and update files in `/remote`
+    directory
+    - Remote JSON will take priority, only new keys from the local codebase will
+      be added.
+- Push `locale` files to the target theme from the `/remote` directory
 
 ## Usage
 
 ### Basic Usage (Sync from Live Theme)
 
 ```source-yaml
- - uses: domaine-matthew-fournier/gh-shopify-locales-sync@v1.2.0
+ - uses: domaine-matthew-fournier/gh-shopify-locales-sync@v1.3.0
   if: ${{ inputs.sync_json }}
   with:
     store: '${{ env.SHOPIFY_FLAG_STORE }}'
@@ -31,7 +34,7 @@ A GitHub Action to sync Shopify locales JSON from your repo to the target theme
 | `store`             | Yes      | -       | The Shopify store URL or identifier                               |
 | `theme`             | Yes      | -       | Theme name or comma seperated list of theme IDs                   |
 | `working-directory` | No       | -       | Working directory path if the action should run in a subdirectory |
-| `sync-behaviours`   | No       | -       | Comma seperated list of behaviour tags                            |
+| `configs`           | No       | -       | Comma seperated list of config tags                               |
 
 ## Development
 

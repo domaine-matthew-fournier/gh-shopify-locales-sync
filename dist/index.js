@@ -30122,7 +30122,7 @@ async function run() {
         const targetThemeIds = coreExports.getInput('theme')
             .split(',')
             .map((id) => id.trim());
-        const syncBehaviours = coreExports.getInput('sync-behaviours')
+        const syncBehaviours = coreExports.getInput('configs')
             ?.split(',')
             ?.map((behaviour) => behaviour.trim()) ?? [];
         const behaviourDoNotAddNewLocales = syncBehaviours.includes('do-not-add-new-locales');

@@ -18,7 +18,7 @@ async function run(): Promise<void> {
 
     const syncBehaviours: string[] =
       core
-        .getInput('sync-behaviours')
+        .getInput('configs')
         ?.split(',')
         ?.map((behaviour) => behaviour.trim()) ?? []
 

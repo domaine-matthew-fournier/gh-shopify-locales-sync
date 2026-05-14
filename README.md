@@ -6,6 +6,7 @@ A GitHub Action to sync Shopify locales JSON from your repo to the target theme
 
 - Pulls target theme `locale` files to `/remote` directory
 - Loops through all files in `/locales`
+<<<<<<< HEAD
   - If remote version does not exist, copy as is to the `/remote` directory
     - This behaviour can be blocked by adding `sync-behaviours` =
       `do-not-add-new-locales` to the
@@ -14,6 +15,12 @@ A GitHub Action to sync Shopify locales JSON from your repo to the target theme
     - Remote JSON will take priority, only new keys from the local codebase will
       be added.
 - Push `locale` files to the target theme from the `/remote` directory
+=======
+  - If remote version does not exist, copy as it to the `/remote` directory
+  - If remote version does exist, merge JSON and update files in `/remote` directory
+    - Remote JSON will take priority, only new keys from the local codebase will be added.
+- Push `locale` files to the target theme from the `/remote` directory 
+>>>>>>> refs/remotes/origin/main
 
 ## Usage
 

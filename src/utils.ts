@@ -52,7 +52,7 @@ export const updateJsonFilesInRemote = async (
   baseJsonFiles: string[],
   destinationJsonFiles: string[],
   destinationPath = `./remote/locales/`,
-  behaviourDoNotAddNewLocales: boolean
+  configDoNotAddNewLocales: boolean
 ) => {
   for (const baseFile of baseJsonFiles) {
     const baseFileName = baseFile.split('/').pop()
@@ -62,7 +62,7 @@ export const updateJsonFilesInRemote = async (
     )
 
     if (!destinationFile) {
-      if (behaviourDoNotAddNewLocales === true) {
+      if (configDoNotAddNewLocales === true) {
         info(
           `No matching destination file found for ${baseFile}, skipping due to behaviour 'do-not-add-new-locales'`
         )

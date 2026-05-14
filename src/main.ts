@@ -16,15 +16,18 @@ async function run(): Promise<void> {
       .split(',')
       .map((id) => id.trim())
 
-    const syncBehaviours: string[] =
+    const configsArray: string[] =
       core
         .getInput('configs')
         ?.split(',')
-        ?.map((behaviour) => behaviour.trim()) ?? []
+        ?.map((config) => config.trim()) ?? []
 
-    const behaviourDoNotAddNewLocales: boolean = syncBehaviours.includes(
+    const configDoNotAddNewLocales: boolean = configsArray.includes(
       'do-not-add-new-locales'
     )
+
+    console.log('configDoNotAddNewLocales', configDoNotAddNewLocales)
+    console.log('configsArray', configsArray.join(', '))
 
     // Working Directory Input (optional)
     // Should be the root of the Shopify theme
@@ -62,7 +65,7 @@ async function run(): Promise<void> {
         codeBaseLocaleFiles,
         remoteLocaleFiles,
         `./remote/locales/`,
-        behaviourDoNotAddNewLocales
+        configDoNotAddNewLocales
       )
 
       info(`Pushing JSON files to theme "${targetThemeId}"`)

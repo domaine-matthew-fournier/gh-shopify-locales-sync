@@ -30070,12 +30070,12 @@ const getlocaleFilesFromCodeBaseAndRemote = async () => {
         codeBaseLocaleFiles
     };
 };
-const updateJsonFilesInRemote = async (baseJsonFiles, destinationJsonFiles, destinationPath = `./remote/locales/`, behaviourDoNotAddNewLocales) => {
+const updateJsonFilesInRemote = async (baseJsonFiles, destinationJsonFiles, destinationPath = `./remote/locales/`, configDoNotAddNewLocales) => {
     for (const baseFile of baseJsonFiles) {
         const baseFileName = baseFile.split('/').pop();
         const destinationFile = destinationJsonFiles.find((file) => file.split('/').pop() === baseFileName);
         if (!destinationFile) {
-            if (behaviourDoNotAddNewLocales === true) {
+            if (configDoNotAddNewLocales === true) {
                 coreExports.info(`No matching destination file found for ${baseFile}, skipping due to behaviour 'do-not-add-new-locales'`);
             }
             else {
@@ -30122,10 +30122,12 @@ async function run() {
         const targetThemeIds = coreExports.getInput('theme')
             .split(',')
             .map((id) => id.trim());
-        const syncBehaviours = coreExports.getInput('configs')
+        const configsArray = coreExports.getInput('configs')
             ?.split(',')
-            ?.map((behaviour) => behaviour.trim()) ?? [];
-        const behaviourDoNotAddNewLocales = syncBehaviours.includes('do-not-add-new-locales');
+            ?.map((config) => config.trim()) ?? [];
+        const configDoNotAddNewLocales = configsArray.includes('do-not-add-new-locales');
+        console.log('configDoNotAddNewLocales', configDoNotAddNewLocales);
+        console.log('configsArray', configsArray.join(', '));
         // Working Directory Input (optional)
         // Should be the root of the Shopify theme
         const workingDirectory = coreExports.getInput('working-directory', {
@@ -30146,7 +30148,7 @@ async function run() {
             coreExports.info(`Pulling JSON files from theme "${targetThemeId}"`);
             await execExports.exec(`shopify theme pull --only locales/*.json --theme "${targetThemeId}" --path remote --store ${store} --nodelete`);
             const { remoteLocaleFiles, codeBaseLocaleFiles } = await getlocaleFilesFromCodeBaseAndRemote();
-            await updateJsonFilesInRemote(codeBaseLocaleFiles, remoteLocaleFiles, `./remote/locales/`, behaviourDoNotAddNewLocales);
+            await updateJsonFilesInRemote(codeBaseLocaleFiles, remoteLocaleFiles, `./remote/locales/`, configDoNotAddNewLocales);
             coreExports.info(`Pushing JSON files to theme "${targetThemeId}"`);
             await execExports.exec(`shopify theme push --only locales/*.json --theme "${targetThemeId}" --path remote --store ${store} --nodelete`);
         }

@@ -26,8 +26,7 @@ async function run(): Promise<void> {
       'do-not-add-new-locales'
     )
 
-    console.log('configDoNotAddNewLocales', configDoNotAddNewLocales)
-    console.log('configsArray', configsArray.join(', '))
+    info(`Configs: ${configsArray.join(', ')}`)
 
     // Working Directory Input (optional)
     // Should be the root of the Shopify theme

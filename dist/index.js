@@ -30126,8 +30126,7 @@ async function run() {
             ?.split(',')
             ?.map((config) => config.trim()) ?? [];
         const configDoNotAddNewLocales = configsArray.includes('do-not-add-new-locales');
-        console.log('configDoNotAddNewLocales', configDoNotAddNewLocales);
-        console.log('configsArray', configsArray.join(', '));
+        coreExports.info(`Configs: ${configsArray.join(', ')}`);
         // Working Directory Input (optional)
         // Should be the root of the Shopify theme
         const workingDirectory = coreExports.getInput('working-directory', {

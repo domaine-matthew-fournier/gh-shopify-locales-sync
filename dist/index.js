@@ -30153,7 +30153,7 @@ async function run() {
             ].join('\n'));
             await cleanRemoteFiles({ recreate: true });
             coreExports.info(`Pulling JSON files from theme "${targetThemeId}"`);
-            await execExports.exec(`shopify theme pull --only locales/*.json --theme "${targetThemeId}" --path remote --store ${store} --nodelete ${allowLiveFlag}`);
+            await execExports.exec(`shopify theme pull --only locales/*.json --theme "${targetThemeId}" --path remote --store ${store} --nodelete`);
             const { remoteLocaleFiles, codeBaseLocaleFiles } = await getlocaleFilesFromCodeBaseAndRemote();
             await updateJsonFilesInRemote(codeBaseLocaleFiles, remoteLocaleFiles, `./remote/locales/`, configs.doNotAddNewLocales);
             coreExports.info(`Pushing JSON files to theme "${targetThemeId}"`);

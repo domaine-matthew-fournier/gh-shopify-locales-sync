@@ -56,7 +56,7 @@ async function run(): Promise<void> {
       info(`Pulling JSON files from theme "${targetThemeId}"`)
 
       await exec(
-        `shopify theme pull --only locales/*.json --theme "${targetThemeId}" --path remote --store ${store} --nodelete ${allowLiveFlag}`
+        `shopify theme pull --only locales/*.json --theme "${targetThemeId}" --path remote --store ${store} --nodelete`
       )
 
       const { remoteLocaleFiles, codeBaseLocaleFiles } =

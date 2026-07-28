@@ -30115,6 +30115,13 @@ const getCleanJsonFromFile = async (fileToParse) => {
 
 var execExports = requireExec();
 
+function getConfigs(configs) {
+    return {
+        doNotAddNewLocales: configs.includes('do-not-add-new-locales'),
+        allowPushToLiveTheme: configs.includes('allow-push-to-live-theme')
+    };
+}
+
 async function run() {
     try {
         // REQUIRED INPUTS
@@ -30125,7 +30132,8 @@ async function run() {
         const configsArray = coreExports.getInput('configs')
             ?.split(',')
             ?.map((config) => config.trim()) ?? [];
-        const configDoNotAddNewLocales = configsArray.includes('do-not-add-new-locales');
+        const configs = getConfigs(configsArray);
+        const allowLiveFlag = configs.allowPushToLiveTheme === true ? '--allow-live' : '';
         coreExports.info(`Configs: ${configsArray.join(', ')}`);
         // Working Directory Input (optional)
         // Should be the root of the Shopify theme
@@ -30145,11 +30153,11 @@ async function run() {
             ].join('\n'));
             await cleanRemoteFiles({ recreate: true });
             coreExports.info(`Pulling JSON files from theme "${targetThemeId}"`);
-            await execExports.exec(`shopify theme pull --only locales/*.json --theme "${targetThemeId}" --path remote --store ${store} --nodelete`);
+            await execExports.exec(`shopify theme pull --only locales/*.json --theme "${targetThemeId}" --path remote --store ${store} --nodelete ${allowLiveFlag}`);
             const { remoteLocaleFiles, codeBaseLocaleFiles } = await getlocaleFilesFromCodeBaseAndRemote();
-            await updateJsonFilesInRemote(codeBaseLocaleFiles, remoteLocaleFiles, `./remote/locales/`, configDoNotAddNewLocales);
+            await updateJsonFilesInRemote(codeBaseLocaleFiles, remoteLocaleFiles, `./remote/locales/`, configs.doNotAddNewLocales);
             coreExports.info(`Pushing JSON files to theme "${targetThemeId}"`);
-            await execExports.exec(`shopify theme push --only locales/*.json --theme "${targetThemeId}" --path remote --store ${store} --nodelete`);
+            await execExports.exec(`shopify theme push --only locales/*.json --theme "${targetThemeId}" --path remote --store ${store} --nodelete ${allowLiveFlag}`);
         }
     }
     catch (error) {

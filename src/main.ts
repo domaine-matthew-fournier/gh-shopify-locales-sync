@@ -6,6 +6,7 @@ import {
 } from './utils.js'
 import { exec } from '@actions/exec'
 import { info } from '@actions/core'
+import { getConfigs } from './lib/getConfigs.js'
 
 async function run(): Promise<void> {
   try {
@@ -22,9 +23,10 @@ async function run(): Promise<void> {
         ?.split(',')
         ?.map((config) => config.trim()) ?? []
 
-    const configDoNotAddNewLocales: boolean = configsArray.includes(
-      'do-not-add-new-locales'
-    )
+    const configs = getConfigs(configsArray)
+
+    const allowLiveFlag =
+      configs.allowPushToLiveTheme === true ? '--allow-live' : ''
 
     info(`Configs: ${configsArray.join(', ')}`)
 
@@ -54,7 +56,7 @@ async function run(): Promise<void> {
       info(`Pulling JSON files from theme "${targetThemeId}"`)
 
       await exec(
-        `shopify theme pull --only locales/*.json --theme "${targetThemeId}" --path remote --store ${store} --nodelete`
+        `shopify theme pull --only locales/*.json --theme "${targetThemeId}" --path remote --store ${store} --nodelete ${allowLiveFlag}`
       )
 
       const { remoteLocaleFiles, codeBaseLocaleFiles } =
@@ -64,13 +66,13 @@ async function run(): Promise<void> {
         codeBaseLocaleFiles,
         remoteLocaleFiles,
         `./remote/locales/`,
-        configDoNotAddNewLocales
+        configs.doNotAddNewLocales
       )
 
       info(`Pushing JSON files to theme "${targetThemeId}"`)
 
       await exec(
-        `shopify theme push --only locales/*.json --theme "${targetThemeId}" --path remote --store ${store} --nodelete`
+        `shopify theme push --only locales/*.json --theme "${targetThemeId}" --path remote --store ${store} --nodelete ${allowLiveFlag}`
       )
     }
   } catch (error) {

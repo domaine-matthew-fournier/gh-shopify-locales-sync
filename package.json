@@ -1,7 +1,7 @@
 {
   "name": "typescript-action",
   "description": "GH Action Check Path Changes",
-  "version": "0.0.0",
+  "version": "1.3.2",
   "author": "mattyfours",
   "type": "module",
   "private": true,

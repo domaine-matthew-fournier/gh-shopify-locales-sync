@@ -36,6 +36,13 @@ A GitHub Action to sync Shopify locales JSON from your repo to the target theme
 | `working-directory` | No       | -       | Working directory path if the action should run in a subdirectory |
 | `configs`           | No       | -       | Comma seperated list of config tags                               |
 
+### Configs
+
+| Input                      | Description                                                                                      |
+| -------------------------- | ------------------------------------------------------------------------------------------------ |
+| `do-not-add-new-locales`   | Will prevent new locale files from being pushed, only existing files in Shopify will be modified |
+| `allow-push-to-live-theme` | Allows the locale files to be pushed to a live theme on Shopify                                  |
+
 ## Development
 
 ### Build
